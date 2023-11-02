@@ -28,9 +28,21 @@ public class FallingState : AirborneState
             Data.YVelocity = 0;
 
             if (IsHorizontalInputZero())
+            {
                 StateSwitcher.SwitchState<IdlingState>();
+            }
+            else if (Input.Movement.Sprint.IsPressed())
+            {
+                StateSwitcher.SwitchState<SprintState>();
+            }
+            else if (Input.Movement.Walk.IsPressed())
+            {
+                StateSwitcher.SwitchState<WalkingState>();
+            }
             else
+            {
                 StateSwitcher.SwitchState<RunningState>();
+            }
         }
     }
 }

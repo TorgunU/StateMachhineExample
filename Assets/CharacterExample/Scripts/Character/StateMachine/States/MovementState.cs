@@ -64,5 +64,5 @@ public abstract class MovementState : IState
 
     private Vector3 GetConvertedVelocity() => new Vector3(Data.XVelocity, Data.YVelocity, 0);
 
-    private float ReadHorizontalInput() => Input.Movement.Move.ReadValue<float>();
+    private float ReadHorizontalInput() => Input.Movement.Run.ReadValue<float>();
 }
