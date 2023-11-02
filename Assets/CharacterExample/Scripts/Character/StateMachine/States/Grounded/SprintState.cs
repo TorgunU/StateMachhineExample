@@ -32,8 +32,10 @@ public class SprintState : GroundedState
     public override void Update()
     {
         base.Update();
-
-        if (IsHorizontalInputZero() || Input.Movement.Sprint.IsPressed() == false)
+        
+        if (Input.Movement.Sprint.IsPressed() == false)
+        {
             StateSwitcher.SwitchState<RunningState>();
+        }
     }
 }
