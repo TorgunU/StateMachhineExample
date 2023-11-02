@@ -1,0 +1,32 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Assets.NPC
+{
+    public class Bootstrapper : MonoBehaviour
+    {
+        [SerializeField] private Transform _idlePoint;
+        [SerializeField] private Transform _workPoint;
+        [SerializeField] private WorkerConfig _workerConfig;
+        [SerializeField] private Worker _worker;
+
+        private void Awake()
+        {
+            CreateWorkerConfig();
+            InitWorker();
+        }
+
+        private void CreateWorkerConfig()
+        {
+            _workerConfig.RestStateConfig.TargetPoint = _idlePoint;
+            _workerConfig.WorkingStateConfig.TargetPoint = _workPoint;
+        }
+
+        private void InitWorker()
+        {
+            WorkerStateMachine stateMachine = new WorkerStateMachine(_workerConfig, _worker.transform);
+            _worker.Init(stateMachine);
+        }
+    }
+}
