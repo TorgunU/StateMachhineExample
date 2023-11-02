@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: WorkerConfig
   m_EditorClassIdentifier: 
   _restStateConfig:
-    _speed: 25
-    _duration: 2
+    _speed: 43.4
+    _duration: 0.89
   _workingStateConfig:
-    _speed: 25
-    _duration: 4
+    _speed: 23.1
+    _duration: 1.3

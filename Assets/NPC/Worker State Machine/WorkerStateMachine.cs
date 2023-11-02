@@ -12,7 +12,6 @@ namespace Assets.NPC
         private IMobState _currentState;
 
         private readonly WorkerStateMachineData Data;
-        //private readonly Transform _workerTranform;
         private readonly WorkerConfig _config;
 
         public WorkerStateMachine(WorkerConfig workerConfig, Transform workerTranform)
