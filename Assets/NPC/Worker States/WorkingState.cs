@@ -2,55 +2,44 @@ using UnityEngine;
 
 namespace Assets.NPC.WorkerStates
 {
-    public class WorkingState : MovingToTargetState
+    public class WorkingState : IMobState
     {
-        private WorkingStateConfig _config;
-        private IStateSwitcher _stateSwitcher;
-        private float _passedTime;
+        private ITimer _timer;
 
-        public WorkingState(WorkingStateConfig config, IStateSwitcher stateSwitcher, WorkerStateMachineData machineData,
-            Transform workerTranform) : base(config, machineData, workerTranform)
+        private readonly WorkingStateConfig _config;
+        private readonly IStateSwitcher _stateSwitcher;
+        private readonly WorkerStateMachineData _data;
+
+        public WorkingState(WorkingStateConfig config, IStateSwitcher stateSwitcher, 
+            WorkerStateMachineData machineData, ITimer timer)
         {
             _config = config;
             _stateSwitcher = stateSwitcher;
+            _data = machineData;
+            _timer = timer;
         }
 
-        public override void Enter()
+        public void Enter()
         {
-            base.Enter();
-            Data.Duration = _config.Duration;
-            Data.TargetPoint = _config.TargetPoint;
+            _timer.RequiredTime = _config.Duration;
+            _timer.StartCalculate();
 
             Debug.Log(GetType());
         }
 
-        public override void Exit()
+        public void Exit()
         {
-            base.Exit();
-            _passedTime = 0;
-            Data.TargetPoint = null;
+            _timer.StopCalculate();
+            // need to fix
+            //_data.TargetPoint = _config.TargetPoint;
         }
 
-        public override void Update()
+        public void Update()
         {
-            base.Update();
-
-            _passedTime += Time.deltaTime;
-
-            if (IsTimePassed() == false)
-            {
+            if (_timer.IsReached() == false)
                 return;
-            }
 
-            if(IsMovedToTarget())
-            {
-                _stateSwitcher.SwitchState<RestingState>();
-            }
-        }
-
-        private bool IsTimePassed()
-        {
-            return _passedTime >= _config.Duration;
+            _stateSwitcher.SwitchState<MovingToRestState>();
         }
     }
 }

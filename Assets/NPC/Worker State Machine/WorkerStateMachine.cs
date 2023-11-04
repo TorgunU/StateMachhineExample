@@ -14,15 +14,18 @@ namespace Assets.NPC
         private readonly WorkerStateMachineData Data;
         private readonly WorkerConfig _config;
 
-        public WorkerStateMachine(WorkerConfig workerConfig, Transform workerTranform)
+        public WorkerStateMachine(WorkerConfig workerConfig, Transform workerTranform,
+            ITimer mobStateTimer)
         {
             _config = workerConfig;
             Data = new WorkerStateMachineData();
 
             _states = new List<IMobState>()
             {
-                new RestingState(_config.RestStateConfig, this, Data, workerTranform),
-                new WorkingState(_config.WorkingStateConfig, this, Data, workerTranform)
+                new RestingState(_config.WorkingStateConfig, this, Data, mobStateTimer),
+                new MovingToRestState(_config.WorkingStateConfig, Data, workerTranform, this),
+                new WorkingState(_config.WorkingStateConfig, this, Data, mobStateTimer),
+                new MovingToWorkState(_config.WorkingStateConfig, Data, workerTranform, this)
             };
 
             _currentState = _states[0];

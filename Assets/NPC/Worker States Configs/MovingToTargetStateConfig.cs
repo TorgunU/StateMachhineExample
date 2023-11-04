@@ -9,6 +9,5 @@ namespace Assets.NPC
         [SerializeField] private float _speed;
 
         public float Speed => _speed;
-        public Transform TargetPoint { get; set; }
     }
 }

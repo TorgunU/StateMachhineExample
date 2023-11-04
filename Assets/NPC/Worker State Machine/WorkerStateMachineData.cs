@@ -5,5 +5,5 @@ using UnityEngine;
 public class WorkerStateMachineData
 {
     public Transform TargetPoint { get; set; }
-    public float Duration { get; set; }
+    public IMobState PreviousState { get; set; }
 }
