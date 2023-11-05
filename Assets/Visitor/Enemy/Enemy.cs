@@ -5,6 +5,8 @@ namespace Assets.Visitor
 {
     public abstract class Enemy: MonoBehaviour
     {
+        public bool IsDied { get; private set; }
+
         public event Action<Enemy> Died;
         //Какая то общая логика врага: передвижение, жизни и тп.
 
@@ -12,6 +14,7 @@ namespace Assets.Visitor
 
         public void Kill()
         {
+            IsDied = true;
             Died?.Invoke(this);
             Destroy(gameObject);
         }

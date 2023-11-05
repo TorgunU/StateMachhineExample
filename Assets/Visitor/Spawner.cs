@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Assets.Visitor
 {
-    public class Spawner: MonoBehaviour, IEnemyDeathNotifier
+    public class Spawner : MonoBehaviour, IEnemyDeathNotifier
     {
         public event Action<Enemy> Notified;
 
@@ -15,8 +16,8 @@ namespace Assets.Visitor
 
         private List<Enemy> _spawnedEnemies = new List<Enemy>();
 
+        private EnemyWeight _weight = new EnemyWeight();
         private Coroutine _spawn;
-
 
         public void StartWork()
         {
@@ -41,12 +42,13 @@ namespace Assets.Visitor
 
         private IEnumerator Spawn()
         {
-            while (true)
+            while (_weight.IsWeightLimited == false)
             {
                 Enemy enemy = _enemyFactory.Get((EnemyType)UnityEngine.Random.Range(0, Enum.GetValues(typeof(EnemyType)).Length));
                 enemy.MoveTo(_spawnPoints[UnityEngine.Random.Range(0, _spawnPoints.Count)].position);
                 enemy.Died += OnEnemyDied;
                 _spawnedEnemies.Add(enemy);
+                _weight.Visit(enemy);
                 yield return new WaitForSeconds(_spawnCooldown);
             }
         }
@@ -56,6 +58,8 @@ namespace Assets.Visitor
             Notified?.Invoke(enemy);
             enemy.Died -= OnEnemyDied;
             _spawnedEnemies.Remove(enemy);
+            _weight.Visit(enemy);
+            StartWork();
         }
     }
 }
